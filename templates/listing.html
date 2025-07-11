@@ -1,0 +1,96 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Central Marketplace</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      padding: 20px;
+      background: #f8f8f8;
+    }
+
+    h1 {
+      text-align: center;
+      margin-bottom: 40px;
+    }
+
+    #product-list {
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: center;
+      gap: 30px;
+    }
+
+    .product-card {
+      background: white;
+      border: 1px solid #ddd;
+      border-radius: 8px;
+      padding: 15px;
+      width: 250px;
+      box-shadow: 0 2px 6px rgba(0, 0, 0, 0.05);
+      text-align: center;
+      transition: transform 0.2s;
+    }
+
+    .product-card:hover {
+      transform: scale(1.03);
+    }
+
+    .product-card img {
+      width: 100%;
+      height: auto;
+      border-radius: 4px;
+    }
+
+    .product-card h3 {
+      margin: 15px 0 5px;
+      font-size: 18px;
+    }
+
+    .product-card p {
+      font-weight: bold;
+      margin: 8px 0;
+    }
+
+    .product-card a {
+      text-decoration: none;
+      color: #007BFF;
+    }
+
+    .product-card a:hover {
+      text-decoration: underline;
+    }
+  </style>
+</head>
+<body>
+
+  <h1>Central Marketplace</h1>
+  <div id="product-list">Loading products...</div>
+
+  <script>
+    fetch("/api/products/all")
+      .then(res => res.json())
+      .then(products => {
+        const container = document.getElementById("product-list");
+        container.innerHTML = "";
+        products.forEach(p => {
+          container.innerHTML += `
+            <div class="product-card">
+              <img src="${p.image}" alt="${p.title}">
+              <h3>${p.title}</h3>
+              <p>$${p.price}</p>
+              <a href="${p.link}" target="_blank">See More</a>
+            </div>
+          `;
+        });
+      })
+      .catch(err => {
+        console.error("Error fetching products:", err);
+        document.getElementById("product-list").innerHTML = "<p>Could not load products.</p>";
+      });
+  </script>
+
+</body>
+</html>
